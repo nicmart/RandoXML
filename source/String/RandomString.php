@@ -1,6 +1,9 @@
 <?php
 namespace nicmart\Random\String;
 
+use nicmart\Random\Number\NumberGenerator;
+use nicmart\Random\Number\PhpNumberGenerator;
+
 /**
  * This class picks randomly a string from a fixed collection of strings
  */
@@ -10,6 +13,11 @@ class RandomString implements RandomStringInterface
      * @var array
      */
     private $strings;
+
+    /**
+     * @var NumberGenerator
+     */
+    private $numberGenerator;
 
     /**
      * Get a random string
@@ -75,6 +83,30 @@ class RandomString implements RandomStringInterface
     public function getStrings()
     {
         return $this->strings;
+    }
+
+    /**
+     * @param NumberGenerator $numberGenerator
+     *
+     * @return \nicmart\Random\String\RandomString The current instance
+     */
+    public function setNumberGenerator(NumberGenerator $numberGenerator)
+    {
+        $this->numberGenerator = $numberGenerator;
+
+        return $this;
+    }
+
+    /**
+     * @return \nicmart\Random\Number\NumberGenerator
+     */
+    public function getNumberGenerator()
+    {
+        if (!isset($this->numberGenerator)) {
+            $this->numberGenerator = new PhpNumberGenerator;
+        }
+
+        return $this->numberGenerator;
     }
 
 }
