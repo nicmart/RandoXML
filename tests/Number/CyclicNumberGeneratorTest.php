@@ -28,5 +28,12 @@ class CyclicNumberGeneratorTest extends PHPUnit_Framework_TestCase
         $this->setExpectedException('OutOfRangeException');
         $generator->rand(5, 10);
     }
+
+    public function testRandMaxReturnsSequenceMax()
+    {
+        $generator = new CyclicNumberGenerator(array(4, 76, 4));
+
+        $this->assertEquals(76, $generator->randMax());
+    }
 }
 

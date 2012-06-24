@@ -82,6 +82,17 @@ class NumberGeneratorRecorder implements NumberGenerator
     }
 
     /**
+     * Returns the max integer supported by the generator
+     *
+     * @return int
+     */
+    public function randMax()
+    {
+        return $this->recordedGenerator->randMax();
+    }
+
+
+    /**
      * Put the recorder in playing state.
      * The generator will cyclicly return the recorded numbers
      *

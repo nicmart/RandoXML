@@ -66,5 +66,13 @@ class NumberGeneratorRecorderTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals(array($n, $m), $recorder->getRecording());
     }
+
+    public function testRandMaxReturnsRecordedGeneratorMax()
+    {
+        $generator = new PhpNumberGenerator;
+        $recorder = new NumberGeneratorRecorder($generator);
+
+        $this->assertEquals($generator->randMax(), $recorder->randMax());
+    }
 }
 

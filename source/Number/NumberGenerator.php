@@ -14,4 +14,12 @@ interface NumberGenerator
      * @return mixed
      */
     public function rand($min, $max);
+
+    /**
+     * Returns the max integer supported by the generator
+     *
+     * @abstract
+     * @return int
+     */
+    public function randMax();
 }

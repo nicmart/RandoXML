@@ -26,4 +26,14 @@ class PhpNumberGenerator implements NumberGenerator
 
         return rand($min, $max);
     }
+
+    /**
+     * Returns the max integer supported by the generator
+     *
+     * @return int
+     */
+    public function randMax()
+    {
+        return getrandmax();
+    }
 }

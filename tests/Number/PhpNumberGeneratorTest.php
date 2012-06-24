@@ -29,5 +29,12 @@ class PhpNumberGeneratorTest extends PHPUnit_Framework_TestCase
         $this->assertLessThanOrEqual(20, $n);
         $this->assertGreaterThanOrEqual(1, $n);
     }
+
+    public function testRandMax()
+    {
+        $generator = new PhpNumberGenerator;
+
+        $this->assertEquals(getrandmax(), $generator->randMax());
+    }
 }
 

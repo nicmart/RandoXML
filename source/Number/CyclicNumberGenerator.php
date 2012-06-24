@@ -46,6 +46,17 @@ class CyclicNumberGenerator implements NumberGenerator
     }
 
     /**
+     * Returns the max integer supported by the generator
+     *
+     * @return int
+     */
+    public function randMax()
+    {
+        return max($this->getSequence());
+    }
+
+
+    /**
      * @param array $sequence
      *
      * @return CyclicNumberGenerator The current instance

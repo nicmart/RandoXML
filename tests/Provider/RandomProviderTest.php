@@ -99,4 +99,15 @@ class MockedNumberGenerator implements NumberGenerator
         return 1;
     }
 
+    /**
+     * Returns the max integer supported by the generator
+     *
+     * @return int
+     */
+    public function randMax()
+    {
+        return getrandmax();
+    }
+
+
 }
