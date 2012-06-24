@@ -5,6 +5,7 @@
 use nicmart\Random\Provider\RandomProvider;
 use nicmart\Random\Number\NumberGenerator;
 use nicmart\Random\Number\PhpNumberGenerator;
+use nicmart\Random\Number\CyclicNumberGenerator;
 
 class RandomProviderTest extends PHPUnit_Framework_TestCase
 {
@@ -50,19 +51,19 @@ class RandomProviderTest extends PHPUnit_Framework_TestCase
     public function testGet()
     {
         $provider = new RandomProvider;
-        $provider->setNumberGenerator(new MockedNumberGenerator());
-
-        $object = new SplStack();
+        $provider->setNumberGenerator(new CyclicNumberGenerator(array(0, 1, 4)));
 
         $weightedChoices = array(
-            array($object, 1),
+            array('miao', 1),
             array('arrivederci', '1'),
             array('buonasera', '2'),
         );
 
         $provider->addChoices($weightedChoices);
 
+        $this->assertEquals('miao', $provider->get());
         $this->assertEquals('arrivederci', $provider->get());
+        $this->assertEquals('buonasera', $provider->get());
     }
 
     public function testGetChoices()
@@ -83,7 +84,6 @@ class RandomProviderTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($weightedChoices, $provider->getChoices());
         $this->assertEquals($plainStrings, $provider->getPlainChoices());
     }
-
 }
 
 class MockedNumberGenerator implements NumberGenerator
@@ -106,7 +106,7 @@ class MockedNumberGenerator implements NumberGenerator
      */
     public function randMax()
     {
-        return getrandmax();
+        return 4;
     }
 
 

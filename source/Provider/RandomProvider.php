@@ -27,12 +27,20 @@ class RandomProvider implements Provider
      */
     public function get()
     {
+        $totalWeight = $this->getWeightsSum();
         $choices = $this->getChoices();
+        $randMax = $this->getNumberGenerator()->randMax();
 
-        $strings = $this->getPlainChoices();
-        $key = $this->getNumberGenerator()->rand(0, count($choices) - 1);
+        $edge = 0;
+        $n = $this->getNumberGenerator()->rand(0, $randMax);
 
-        return $strings[$key];
+        foreach ($choices as $choice) {
+            $edge = round( ($choice[1] * $randMax) / $totalWeight) + $edge;
+            if($n < $edge)
+                return $choice[0];
+        }
+
+        return $choices[count($choices) - 1][0];
     }
 
     /**
@@ -49,9 +57,9 @@ class RandomProvider implements Provider
             if (!is_array($stringAndWeight)) {
                 $stringAndWeight = array($stringAndWeight, 1);
             }
-            list($string, $weight) = $stringAndWeight;
+            list($choice, $weight) = $stringAndWeight;
 
-            $this->addChoice($string, $weight);
+            $this->addChoice($choice, $weight);
         }
 
         return $this;
@@ -116,4 +124,19 @@ class RandomProvider implements Provider
         return $this->numberGenerator;
     }
 
+    /**
+     * Returns the sum of all choices weights
+     *
+     * @return int
+     */
+    private function getWeightsSum()
+    {
+        $sum = 0;
+
+        foreach ($this->getChoices() as $choice) {
+            $sum += $choice[1];
+        }
+
+        return $sum;
+    }
 }
