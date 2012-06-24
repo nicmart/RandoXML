@@ -1,16 +1,16 @@
 <?php
 /**
- * Unit tests for RandomString class
+ * Unit tests for RandomProvider class
  */
-use nicmart\Random\String\RandomString;
+use nicmart\Random\Provider\RandomProvider;
 use nicmart\Random\Number\NumberGenerator;
 use nicmart\Random\Number\PhpNumberGenerator;
 
-class RandomStringTest extends PHPUnit_Framework_TestCase
+class RandomProviderTest extends PHPUnit_Framework_TestCase
 {
     public function testAddString()
     {
-        $string = new RandomString;
+        $string = new RandomProvider;
 
         $string
             ->addString('a', 2)
@@ -27,7 +27,7 @@ class RandomStringTest extends PHPUnit_Framework_TestCase
 
     public function testGetNumberGeneratorReturnsPhpNumberGeneratorAsDefault()
     {
-        $string = new RandomString;
+        $string = new RandomProvider;
 
         $generator = $string->getNumberGenerator();
 
@@ -36,7 +36,7 @@ class RandomStringTest extends PHPUnit_Framework_TestCase
 
     public function testSetAndGetNumberGenerator()
     {
-        $string = new RandomString;
+        $string = new RandomProvider;
         $string->setNumberGenerator(new MockedNumberGenerator);
 
         $generator = $string->getNumberGenerator();
@@ -46,7 +46,7 @@ class RandomStringTest extends PHPUnit_Framework_TestCase
 
     public function testGetRandomString()
     {
-        $string = new RandomString;
+        $string = new RandomProvider;
 
         $stringsAndWeights = array(
             array('ciao', 1),
@@ -63,7 +63,7 @@ class RandomStringTest extends PHPUnit_Framework_TestCase
 
     public function testGetStrings()
     {
-        $string = new RandomString;
+        $string = new RandomProvider;
 
         $stringsAndWeights = array(
             array('ciao', 1),

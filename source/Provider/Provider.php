@@ -1,10 +1,10 @@
 <?php
-namespace nicmart\Random\String;
+namespace nicmart\Random\Provider;
 
 /**
  * Interface to retrieve a random string
  */
-interface RandomStringInterface
+interface Provider
 {
     /**
      * @abstract

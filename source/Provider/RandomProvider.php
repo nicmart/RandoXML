@@ -1,13 +1,14 @@
 <?php
-namespace nicmart\Random\String;
+namespace nicmart\Random\Provider;
 
+use nicmart\Random\Provider\Provider;
 use nicmart\Random\Number\NumberGenerator;
 use nicmart\Random\Number\PhpNumberGenerator;
 
 /**
  * This class picks randomly a string from a fixed collection of strings
  */
-class RandomString implements RandomStringInterface
+class RandomProvider implements Provider
 {
     /**
      * @var array
@@ -54,7 +55,7 @@ class RandomString implements RandomStringInterface
      * @param $string The string to add
      * @param int $weight The probabilistic weight of this string
      *
-     * @return RandomString the current instance
+     * @return RandomSource the current instance
      */
     public function addString($string, $weight = 1)
     {
@@ -88,7 +89,7 @@ class RandomString implements RandomStringInterface
     /**
      * @param NumberGenerator $numberGenerator
      *
-     * @return \nicmart\Random\String\RandomString The current instance
+     * @return \nicmart\Random\String\RandomSource The current instance
      */
     public function setNumberGenerator(NumberGenerator $numberGenerator)
     {
