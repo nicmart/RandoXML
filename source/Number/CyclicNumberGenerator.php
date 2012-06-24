@@ -14,9 +14,9 @@ class CyclicNumberGenerator implements NumberGenerator
     /**
      * @param array $sequence
      */
-    public function __construct(array $sequence = array(1))
+    public function __construct(array $sequence = array())
     {
-        $this->sequence = $sequence;
+        $this->setSequence($sequence);
     }
 
     /**
@@ -43,5 +43,23 @@ class CyclicNumberGenerator implements NumberGenerator
             reset($this->sequence);
 
         return $n;
+    }
+
+    /**
+     * @param array $sequence
+     *
+     * @return CyclicNumberGenerator The current instance
+     */
+    public function setSequence(array $sequence)
+    {
+        $this->sequence = $sequence;
+    }
+
+    /**
+     * @return array
+     */
+    public function getSequence()
+    {
+        return $this->sequence;
     }
 }
