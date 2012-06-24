@@ -13,7 +13,7 @@ class RandomProvider implements Provider
     /**
      * @var array
      */
-    private $strings;
+    private $choices;
 
     /**
      * @var NumberGenerator
@@ -21,14 +21,16 @@ class RandomProvider implements Provider
     private $numberGenerator;
 
     /**
-     * Get a random string
+     * Get a random choice
      *
-     * @return string
+     * @return mixed
      */
     public function get()
     {
-        $strings = $this->getPlainStrings();
-        $key = array_rand($strings);
+        $choices = $this->getChoices();
+
+        $strings = $this->getPlainChoices();
+        $key = $this->getNumberGenerator()->rand(0, count($choices) - 1);
 
         return $strings[$key];
     }
@@ -37,29 +39,33 @@ class RandomProvider implements Provider
      * Add an array of strings. Each array item can be a plain string or an array with
      * two elements, the string and the probabilistic weight for that string
      *
-     * @param array $stringsAndWeights
+     * @param array $choicesAndWeights
+     *
+     * @return RandomProvider
      */
-    public function addStrings(array $stringsAndWeights)
+    public function addChoices(array $choicesAndWeights)
     {
-        foreach ($stringsAndWeights as $stringAndWeight) {
+        foreach ($choicesAndWeights as $stringAndWeight) {
             if (!is_array($stringAndWeight)) {
                 $stringAndWeight = array($stringAndWeight, 1);
             }
             list($string, $weight) = $stringAndWeight;
 
-            $this->addString($string, $weight);
+            $this->addChoice($string, $weight);
         }
+
+        return $this;
     }
 
     /**
-     * @param $string The string to add
+     * @param $choice The string to add
      * @param int $weight The probabilistic weight of this string
      *
-     * @return RandomSource the current instance
+     * @return RandomProvider the current instance
      */
-    public function addString($string, $weight = 1)
+    public function addChoice($choice, $weight = 1)
     {
-        $this->strings[] = array($string, $weight);
+        $this->choices[] = array($choice, $weight);
 
         return $this;
     }
@@ -67,29 +73,29 @@ class RandomProvider implements Provider
     /**
      * Return the array of strings withought the probabilistic weights
      *
-     * @return array The array of strings
+     * @return array The array of choices without weights
      */
-    public function getPlainStrings()
+    public function getPlainChoices()
     {
        return array_map(function($item){
                return $item[0];
-       }, $this->strings);
+       }, $this->choices);
     }
 
     /**
-     * The array of the weighted strings
+     * The array of the weighted choices
      *
      * @return array
      */
-    public function getStrings()
+    public function getChoices()
     {
-        return $this->strings;
+        return $this->choices;
     }
 
     /**
      * @param NumberGenerator $numberGenerator
      *
-     * @return \nicmart\Random\String\RandomSource The current instance
+     * @return RandomProvider The current instance
      */
     public function setNumberGenerator(NumberGenerator $numberGenerator)
     {
@@ -99,7 +105,7 @@ class RandomProvider implements Provider
     }
 
     /**
-     * @return \nicmart\Random\Number\NumberGenerator
+     * @return NumberGenerator
      */
     public function getNumberGenerator()
     {

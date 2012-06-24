@@ -8,18 +8,21 @@ use nicmart\Random\Number\PhpNumberGenerator;
 
 class RandomProviderTest extends PHPUnit_Framework_TestCase
 {
-    public function testAddString()
+    public function testAddChoice()
     {
-        $string = new RandomProvider;
+        $provider = new RandomProvider;
 
-        $string
-            ->addString('a', 2)
-            ->addString('b')
+        // A class of the standard library
+        $object = new SplStack();
+
+        $provider
+            ->addChoice($object, 2)
+            ->addChoice('b')
         ;
 
-        $strings = $string->getStrings();
+        $strings = $provider->getChoices();
 
-        $this->assertEquals('a', $strings[0][0], 'Add string sets string correctly');
+        $this->assertEquals($object, $strings[0][0], 'Add string sets string correctly');
         $this->assertEquals(2, $strings[0][1], 'Add string sets weight correctly');
         $this->assertEquals('b', $strings[1][0], 'Add string sets string correctly');
         $this->assertEquals(1, $strings[1][1], 'Add string sets default weight to 1');
@@ -27,57 +30,60 @@ class RandomProviderTest extends PHPUnit_Framework_TestCase
 
     public function testGetNumberGeneratorReturnsPhpNumberGeneratorAsDefault()
     {
-        $string = new RandomProvider;
+        $provider = new RandomProvider;
 
-        $generator = $string->getNumberGenerator();
+        $generator = $provider->getNumberGenerator();
 
         $this->assertInstanceOf('\nicmart\Random\Number\PhpNumberGenerator', $generator);
     }
 
     public function testSetAndGetNumberGenerator()
     {
-        $string = new RandomProvider;
-        $string->setNumberGenerator(new MockedNumberGenerator);
+        $provider = new RandomProvider;
+        $provider->setNumberGenerator(new MockedNumberGenerator);
 
-        $generator = $string->getNumberGenerator();
+        $generator = $provider->getNumberGenerator();
 
         $this->assertInstanceOf('MockedNumberGenerator', $generator);
     }
 
-    public function testGetRandomString()
+    public function testGet()
     {
-        $string = new RandomProvider;
+        $provider = new RandomProvider;
+        $provider->setNumberGenerator(new MockedNumberGenerator());
 
-        $stringsAndWeights = array(
-            array('ciao', 1),
+        $object = new SplStack();
+
+        $weightedChoices = array(
+            array($object, 1),
             array('arrivederci', '1'),
             array('buonasera', '2'),
         );
 
-        $plainStrings = array_map(function($item){ return $item[0]; }, $stringsAndWeights);
+        $provider->addChoices($weightedChoices);
 
-        $string->addStrings($stringsAndWeights);
-
-        $this->assertContains($string->get(), $plainStrings);
+        $this->assertEquals('arrivederci', $provider->get());
     }
 
-    public function testGetStrings()
+    public function testGetChoices()
     {
-        $string = new RandomProvider;
+        $provider = new RandomProvider;
+        $object = new SplStack();
 
-        $stringsAndWeights = array(
-            array('ciao', 1),
+        $weightedChoices = array(
+            array($object, 1),
             array('arrivederci', '1'),
             array('buonasera', '2'),
         );
 
-        $plainStrings = array_map(function($item){ return $item[0]; }, $stringsAndWeights);
+        $plainStrings = array_map(function($item){ return $item[0]; }, $weightedChoices);
 
-        $string->addStrings($stringsAndWeights);
+        $provider->addChoices($weightedChoices);
 
-        $this->assertEquals($stringsAndWeights, $string->getStrings());
-        $this->assertEquals($plainStrings, $string->getPlainStrings());
+        $this->assertEquals($weightedChoices, $provider->getChoices());
+        $this->assertEquals($plainStrings, $provider->getPlainChoices());
     }
+
 }
 
 class MockedNumberGenerator implements NumberGenerator
