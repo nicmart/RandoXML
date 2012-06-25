@@ -35,7 +35,7 @@ class RandomProvider implements Provider
         $n = $this->getNumberGenerator()->rand(0, $randMax);
 
         foreach ($choices as $choice) {
-            $edge = round( ($choice[1] * $randMax) / $totalWeight) + $edge;
+            $edge = round( ($choice[1] * ($randMax + 1)) / $totalWeight) + $edge;
             if($n < $edge)
                 return $choice[0];
         }
