@@ -14,6 +14,13 @@ class Collection implements Provider
     private $providers = array();
 
     /**
+     * The array ov cached values returned by providers
+     *
+     * @var array
+     */
+    private $cachedValues = array();
+
+    /**
      *
      * @return mixed
      */
@@ -25,12 +32,13 @@ class Collection implements Provider
     /**
      * @param string $name
      * @param Provider $provider
+     * @param boolean $cached
      *
      * @return Collection The current instance
      */
-    public function register($name, Provider $provider)
+    public function register($name, Provider $provider, $cached = true)
     {
-        $this->providers[$name] = $provider;
+        $this->providers[$name] = array($provider, $cached);
 
         return $this;
     }
@@ -46,7 +54,7 @@ class Collection implements Provider
             throw new \InvalidArgumentException("There is no provider registered with name '$name'");
         }
 
-        return $this->providers[$name];
+        return $this->providers[$name][0];
     }
 
     /**
@@ -56,6 +64,26 @@ class Collection implements Provider
      */
     public function value($name)
     {
-        return $this->provider($name)->get();
+        if (!isset($this->cachedValues[$name]) || !$this->isProviderCached($name)) {
+            $this->cachedValues[$name] = $this->provider($name)->get();
+        }
+
+        return $this->cachedValues[$name];
+    }
+
+    /**
+     * Is the provider cached?
+     *
+     * @param $name
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    private function isProviderCached($name)
+    {
+        if (!isset($this->providers[$name])) {
+            throw new \InvalidArgumentException("There is no provider registered with name '$name'");
+        }
+
+        return $this->providers[$name][1];
     }
 }

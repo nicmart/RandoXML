@@ -51,4 +51,31 @@ class CollectionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('mock1', $collection->value('a'));
         $this->assertEquals('mock2', $collection->value('b'));
     }
+
+    public function testValueAndCachingProviderResults()
+    {
+        $collection = $this->collection;
+
+        $mock1 = $this->getMock('\nicmart\Random\Provider\Provider');
+        $mock1->expects($this->once())
+                ->method('get')
+                ->will($this->returnValue('aaa'))
+        ;
+
+        $mock2 = $this->getMock('\nicmart\Random\Provider\Provider');
+        $mock2->expects($this->exactly(2))
+                ->method('get')
+                ->will($this->returnValue('bbb'))
+        ;
+
+        $collection->register('cached', $mock1, true);
+        $collection->register('nocached', $mock2, false);
+
+        //Call both values twice
+        $collection->value('cached');
+        $collection->value('cached');
+
+        $collection->value('nocached');
+        $collection->value('nocached');
+    }
 }
