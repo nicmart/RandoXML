@@ -10,7 +10,25 @@ class CollectionTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         $this->mock1 = $this->getMock('\nicmart\Random\Provider\Provider');
+
+        $this->mock1->expects($this->any())
+                ->method('get')
+                ->will($this->returnValue('mock1'))
+        ;
+
         $this->mock2 = $this->getMock('\nicmart\Random\Provider\Provider');
+
+        $this->mock2->expects($this->any())
+                ->method('get')
+                ->will($this->returnValue('mock2'))
+        ;
+
+        $this->collection = new Collection;
+
+        $this->collection
+            ->register('a', $this->mock1)
+            ->register('b', $this->mock2)
+        ;
     }
 
 
@@ -19,17 +37,18 @@ class CollectionTest extends PHPUnit_Framework_TestCase
      */
     public function testRegisterAndGetProvider()
     {
-        $collection = new Collection;
-
-        $collection
-            ->register('a', $this->mock1)
-            ->register('b', $this->mock2)
-        ;
-
-        $this->assertEquals($this->mock1, $collection->provider('a'));
-        $this->assertEquals($this->mock2, $collection->provider('b'));
+        $this->assertEquals($this->mock1, $this->collection->provider('a'));
+        $this->assertEquals($this->mock2, $this->collection->provider('b'));
 
         //This must throw an exception
-        $collection->provider('c');
+        $this->collection->provider('c');
+    }
+
+    public function testValue()
+    {
+        $collection = $this->collection;
+
+        $this->assertEquals('mock1', $collection->value('a'));
+        $this->assertEquals('mock2', $collection->value('b'));
     }
 }

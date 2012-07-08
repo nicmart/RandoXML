@@ -23,7 +23,7 @@ class Collection implements Provider
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @param Provider $provider
      *
      * @return Collection The current instance
@@ -36,7 +36,7 @@ class Collection implements Provider
     }
 
     /**
-     * @param $name
+     * @param string $name
      * @return Provider
      * @throws \InvalidArgumentException
      */
@@ -49,4 +49,13 @@ class Collection implements Provider
         return $this->providers[$name];
     }
 
+    /**
+     * @param string $name
+     * @return mixed
+     * @throws \InvalidArgumentException
+     */
+    public function value($name)
+    {
+        return $this->provider($name)->get();
+    }
 }
