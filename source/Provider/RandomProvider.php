@@ -6,7 +6,7 @@ use nicmart\Random\Number\NumberGenerator;
 use nicmart\Random\Number\PhpNumberGenerator;
 
 /**
- * This class picks randomly a string from a fixed collection of strings
+ * This class picks randomly an object from a fixed collection of objects
  */
 class RandomProvider implements Provider
 {

@@ -2,14 +2,14 @@
 namespace nicmart\Random\Provider;
 
 /**
- * Interface to retrieve a random string
+ * Interface to retrieve a random Object
  */
 interface Provider
 {
     /**
      * @abstract
      *
-     * @return string
+     * @return mixed
      */
     public function get();
 }
